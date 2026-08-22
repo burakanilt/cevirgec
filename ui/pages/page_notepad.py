@@ -3,6 +3,7 @@ import markdown
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPlainTextEdit, 
                                QTextBrowser, QSplitter, QPushButton, QFileDialog, QMessageBox)
 from PySide6.QtCore import Qt
+from core.utils.i18n import t
 
 class PageNotepad(QWidget):
     def __init__(self, parent=None):
@@ -15,22 +16,22 @@ class PageNotepad(QWidget):
         
         # Üst Menü
         toolbar = QHBoxLayout()
-        btn_new = QPushButton("Yeni")
-        btn_new.clicked.connect(self.new_file)
+        self.btn_new = QPushButton("Yeni / New")
+        self.btn_new.clicked.connect(self.new_file)
         
-        btn_open = QPushButton("Aç")
-        btn_open.clicked.connect(self.open_file)
+        self.btn_open = QPushButton(t("btn_open_file"))
+        self.btn_open.clicked.connect(self.open_file)
         
-        btn_save = QPushButton("Kaydet")
-        btn_save.clicked.connect(self.save_file)
+        self.btn_save = QPushButton(t("btn_save_file"))
+        self.btn_save.clicked.connect(self.save_file)
         
-        btn_export = QPushButton("MD Olarak Dışa Aktar")
-        btn_export.clicked.connect(self.export_file)
+        self.btn_export = QPushButton(t("btn_export_pdf"))
+        self.btn_export.clicked.connect(self.export_file)
         
-        toolbar.addWidget(btn_new)
-        toolbar.addWidget(btn_open)
-        toolbar.addWidget(btn_save)
-        toolbar.addWidget(btn_export)
+        toolbar.addWidget(self.btn_new)
+        toolbar.addWidget(self.btn_open)
+        toolbar.addWidget(self.btn_save)
+        toolbar.addWidget(self.btn_export)
         toolbar.addStretch()
         
         layout.addLayout(toolbar)
@@ -39,7 +40,7 @@ class PageNotepad(QWidget):
         splitter = QSplitter(Qt.Horizontal)
         
         self.editor = QPlainTextEdit()
-        self.editor.setPlaceholderText("Markdown formatında yazmaya başlayın...")
+        self.editor.setPlaceholderText("Markdown / Text...")
         self.editor.textChanged.connect(self.update_preview)
         
         self.preview = QTextBrowser()
@@ -58,10 +59,14 @@ class PageNotepad(QWidget):
         
         self.load_backup()
 
+    def retranslate_ui(self):
+        self.btn_open.setText(t("btn_open_file"))
+        self.btn_save.setText(t("btn_save_file"))
+        self.btn_export.setText(t("btn_export_pdf"))
+
     def update_preview(self):
         text = self.editor.toPlainText()
         html = markdown.markdown(text, extensions=['extra', 'tables', 'fenced_code'])
-        # Add basic styling to make it look nice
         styled_html = f"""
         <style>
             body {{ font-family: 'Segoe UI', sans-serif; font-size: 14px; color: #2D2A26; }}
@@ -97,7 +102,7 @@ class PageNotepad(QWidget):
         self.current_file = None
 
     def open_file(self):
-        path, _ = QFileDialog.getOpenFileName(self, "Aç", "", "Markdown Files (*.md);;Text Files (*.txt);;All Files (*.*)")
+        path, _ = QFileDialog.getOpenFileName(self, t("select_file"), "", "Markdown Files (*.md);;Text Files (*.txt);;All Files (*.*)")
         if path:
             self.load_file(path)
 
@@ -107,36 +112,36 @@ class PageNotepad(QWidget):
                 self.editor.setPlainText(f.read())
             self.current_file = path
         except Exception as e:
-            QMessageBox.critical(self, "Hata", str(e))
+            QMessageBox.critical(self, t("error"), str(e))
 
     def save_file(self):
         if self.current_file:
             try:
                 with open(self.current_file, "w", encoding="utf-8") as f:
                     f.write(self.editor.toPlainText())
-                QMessageBox.information(self, "Başarılı", "Kaydedildi.")
+                QMessageBox.information(self, t("success"), t("msg_note_saved"))
             except Exception as e:
-                QMessageBox.critical(self, "Hata", str(e))
+                QMessageBox.critical(self, t("error"), str(e))
         else:
             self.save_file_as()
 
     def save_file_as(self):
-        path, _ = QFileDialog.getSaveFileName(self, "Kaydet", "", "Text Files (*.txt);;All Files (*.*)")
+        path, _ = QFileDialog.getSaveFileName(self, t("save_as"), "", "Text Files (*.txt);;All Files (*.*)")
         if path:
             try:
                 with open(path, "w", encoding="utf-8") as f:
                     f.write(self.editor.toPlainText())
                 self.current_file = path
-                QMessageBox.information(self, "Başarılı", "Dosya başarıyla kaydedildi.")
+                QMessageBox.information(self, t("success"), t("msg_note_saved"))
             except Exception as e:
-                QMessageBox.critical(self, "Hata", str(e))
+                QMessageBox.critical(self, t("error"), str(e))
 
     def export_file(self):
-        path, _ = QFileDialog.getSaveFileName(self, "MD Olarak Dışa Aktar", "", "Markdown Files (*.md)")
+        path, _ = QFileDialog.getSaveFileName(self, t("save_as"), "", "Markdown Files (*.md)")
         if path:
             try:
                 with open(path, "w", encoding="utf-8") as f:
                     f.write(self.editor.toPlainText())
-                QMessageBox.information(self, "Başarılı", "Dosya başarıyla Markdown olarak dışa aktarıldı.")
+                QMessageBox.information(self, t("success"), t("msg_note_pdf_exported"))
             except Exception as e:
-                QMessageBox.critical(self, "Hata", str(e))
+                QMessageBox.critical(self, t("error"), str(e))

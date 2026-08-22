@@ -128,11 +128,12 @@ def sort_ocr_results_by_columns(results):
             
     return [results[i] for i in sorted_indices]
 
-def run_ocr(image: Image.Image):
+def run_ocr(image: Image.Image, lang: str = "tr"):
     """
     Runs RapidOCR on a PIL Image and returns extracted text and bounding boxes.
     Returns: list of (bbox, text, confidence) or None if no text found.
     bbox format: [[x1, y1], [x2, y2], [x3, y3], [x4, y4]]
+    lang: 'tr' (Turkish with post-processing), 'en' (English), or 'latin' (Multilingual Latin)
     """
     engine = get_engine()
     
@@ -147,7 +148,10 @@ def run_ocr(image: Image.Image):
     processed_result = []
     if result:
         for bbox, text, score in result:
-            corrected_text = post_process_turkish(text)
+            if lang == "tr":
+                corrected_text = post_process_turkish(text)
+            else:
+                corrected_text = text
             processed_result.append((bbox, corrected_text, score))
             
     return processed_result or None

@@ -18,7 +18,7 @@ def convert_digital_pdf_to_word(pdf_path: str, docx_path: str, pages: list[int] 
         cv.close()
 
 @time_it("PDF to Word (OCR)")
-def convert_scanned_pdf_to_word(pdf_path: str, docx_path: str, pages: list[int] = None):
+def convert_scanned_pdf_to_word(pdf_path: str, docx_path: str, pages: list[int] = None, lang: str = "tr"):
     """
     Converts scanned PDF pages to a Word document using RapidOCR.
     """
@@ -36,7 +36,7 @@ def convert_scanned_pdf_to_word(pdf_path: str, docx_path: str, pages: list[int] 
             
         for i, page_num in enumerate(pages):
             img = render_page(pdf_doc, page_num, dpi=300)
-            result = run_ocr(img)
+            result = run_ocr(img, lang=lang)
             
             if result:
                 import numpy as np
