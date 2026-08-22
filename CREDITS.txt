@@ -1,0 +1,97 @@
+Çevirgeç PDF V.2.0 - Üçüncü Parti Yazılım Kredileri ve Lisansları
+
+Bu yazılım, GNU Affero Genel Kamu Lisansı (AGPL-3.0) altındadır ve kaynak kodları açık kaynaklıdır. 
+Copyright (c) 2026 Burak Tekiner
+
+Çevirgeç PDF bünyesinde kullanılan ana üçüncü parti kütüphanelerin listesi, telif sahipleri, kullanım amaçları ve lisans türleri aşağıda belirtilmiştir. Bu kütüphanelerin geliştiricilerine katkılarından ötürü teşekkür ederiz.
+
+--------------------------------------------------------------------------------
+
+1. PySide6
+   - Kullanım Amacı: Kullanıcı Arayüzü (Qt Widgets)
+   - Lisans: LGPL v3 / Ticari
+   - Sahibi/Kredi: The Qt Company (https://www.qt.io/)
+
+2. PyMuPDF (fitz)
+   - Kullanım Amacı: PDF Okuma, Düzenleme, Sayfa Önizleme, Sıkıştırma ve İmza İşlemleri
+   - Lisans: AGPL-3.0 / Ticari
+   - Sahibi/Kredi: Artifex Software, Inc. (https://github.com/pymupdf/PyMuPDF)
+
+3. pymupdf4llm
+   - Kullanım Amacı: PDF belgelerini Markdown (MD) formatına dönüştürme
+   - Lisans: AGPL-3.0 / Ticari
+   - Sahibi/Kredi: Artifex Software, Inc. (https://github.com/pymupdf/pymupdf4llm)
+
+4. pdf2docx
+   - Kullanım Amacı: Dijital PDF belgelerini Word (.docx) formatına dönüştürme
+   - Lisans: GPL-3.0
+   - Sahibi/Kredi: Artifex Software & contributors (https://github.com/ArtifexSoftware/pdf2docx)
+
+5. rapidocr-onnxruntime (ve ONNX Runtime)
+   - Kullanım Amacı: Çevrimdışı ve hızlı Türkçe OCR (Görüntüden Metin Çıkarımı)
+   - Lisans: Apache-2.0
+   - Sahibi/Kredi: RapidAI (https://github.com/RapidAI/RapidOCR)
+
+6. img2table
+   - Kullanım Amacı: Taranmış belgelerdeki tabloları tespit etme ve çıkarma
+   - Lisans: MIT
+   - Sahibi/Kredi: Xavier Canton (https://github.com/xoolive/img2table)
+
+7. pdfplumber
+   - Kullanım Amacı: Dijital PDF'lerden yapılandırılmış metin ve tablo çıkarma
+   - Lisans: MIT
+   - Sahibi/Kredi: Jeremy Singer-Vine (https://github.com/jsvine/pdfplumber)
+
+8. Pillow (PIL)
+   - Kullanım Amacı: Görsel boyutlandırma, format dönüştürme, DPI ayarları ve ıslak imza temizliği
+   - Lisans: HPND (Historical Permission Notice and Disclaimer - MIT benzeri)
+   - Sahibi/Kredi: Alex Clark and Contributors (https://github.com/python-pillow/Pillow)
+
+9. python-docx
+   - Kullanım Amacı: Word (.docx) belgesi oluşturma ve biçimlendirme
+   - Lisans: MIT
+   - Sahibi/Kredi: Steve Canny (https://github.com/python-openxml/python-docx)
+
+10. openpyxl
+    - Kullanım Amacı: Excel (.xlsx) tabloları yazma ve biçimlendirme
+    - Lisans: MIT
+    - Sahibi/Kredi: Eric Gazoni, Charlie Clark (https://github.com/theorchard/openpyxl)
+
+11. reportlab
+    - Kullanım Amacı: Markdown ve diğer metin formatlarından PDF üretimi
+    - Lisans: BSD (ReportLab Open Source License)
+    - Sahibi/Kredi: ReportLab Inc. (https://www.reportlab.com/)
+
+12. pandas
+    - Kullanım Amacı: Tablo verilerinin işlenmesi ve veri yönetimi
+    - Lisans: BSD-3-Clause
+    - Sahibi/Kredi: Pandas Community (https://pandas.pydata.org/)
+
+13. camelot-py
+    - Kullanım Amacı: PDF'lerden tablo tespiti ve çıkarımı
+    - Lisans: MIT
+    - Sahibi/Kredi: Vinayak Mehta (https://github.com/camelot-dev/camelot)
+
+14. qtawesome
+    - Kullanım Amacı: Arayüz içi vektörel ikonlar (Font Awesome entegrasyonu)
+    - Lisans: MIT
+    - Sahibi/Kredi: Spyder Project (https://github.com/spyder-ide/qtawesome)
+
+15. markdown
+    - Kullanım Amacı: Not defterinde yazılan Markdown metinlerinin HTML önizlemesi
+    - Lisans: BSD
+    - Sahibi/Kredi: Waylan Limberg (https://github.com/Python-Markdown/markdown)
+
+16. docx2pdf
+    - Kullanım Amacı: Microsoft Word (.docx) belgelerini PDF formatına dönüştürme (COM Otomasyonu)
+    - Lisans: MIT
+    - Sahibi/Kredi: Alastair McClelland (https://github.com/al45tair/docx2pdf)
+
+17. pywin32 (win32com / pythoncom)
+    - Kullanım Amacı: Windows COM otomasyonu ile Word ve Excel belgelerinin arka planda PDF'e dönüştürülmesi
+    - Lisans: PSF / MIT
+    - Sahibi/Kredi: Mark Hammond and Contributors (https://github.com/mhammond/pywin32)
+
+--------------------------------------------------------------------------------
+Yasal Not:
+Bu projedeki copyleft bağımlılıklar (özellikle PyMuPDF ve pdf2docx) nedeniyle, Çevirgeç PDF yazılımının kendisi de açık kaynak kodludur ve kodları AGPL-3.0 / GPL-3.0 lisans koşullarına tam uyumlu şekilde edinilebilir durumdadır.

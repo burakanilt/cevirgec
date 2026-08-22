@@ -1,0 +1,41 @@
+# Sanal ortam ve derleme çıktıları
+.venv/
+dist/
+build/
+*.spec.bak
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Gerçek veri içeren test dosyaları — asla commit edilmesin
+tests/samples/
+tests/outputs/
+
+# Antigravity ve yerel çalışma/geçici dosyaları
+.gemini/
+scratch/
+
+# Loglar
+*.log
+.cevirgec_pdf/
+.cevirgec2/
+
+# Geçici test çıktıları
+raw_ocr.txt
+repr_out.txt
+hex_out.txt
+ocr_test_latin_out.txt
+ocr_test_out.txt
+test_post_out.txt
+test_sample8_out.txt
+v5_latin_test.txt
+locked_reqs.txt
+locked_reqs_utf8.txt
+
+# Model dosyaları (büyük ikili dosyalar — scriptlerle indirilir)
+assets/models/*.onnx
+assets/models/*.tar
+assets/models/v5_latin_rec/
+assets/models/turkish_rec/
