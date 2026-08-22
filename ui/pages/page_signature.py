@@ -4,6 +4,7 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
                                QGroupBox, QMessageBox)
 from core.pdf_backend import open_document
 from core.signature import add_signature_to_pdf
+from core.utils.i18n import t
 
 class PageSignature(QWidget):
     def __init__(self, parent=None):
@@ -14,36 +15,37 @@ class PageSignature(QWidget):
         layout = QVBoxLayout(self)
         
         # File selections
-        self.lbl_pdf = QLabel("Seçilen PDF: Yok")
-        btn_pdf = QPushButton("PDF Seç")
-        btn_pdf.clicked.connect(self.select_pdf)
+        self.lbl_pdf = QLabel(t("selected_file", file=t("none_selected")))
+        self.btn_pdf = QPushButton(t("select_file"))
+        self.btn_pdf.clicked.connect(self.select_pdf)
         
-        self.lbl_sig = QLabel("Seçilen İmza (Şeffaf PNG): Yok")
-        btn_sig = QPushButton("İmza Seç")
-        btn_sig.clicked.connect(self.select_sig)
+        self.lbl_sig = QLabel(t("lbl_sig_image") + " " + t("none_selected"))
+        self.btn_sig = QPushButton(t("btn_select_sig"))
+        self.btn_sig.clicked.connect(self.select_sig)
         
         layout.addWidget(self.lbl_pdf)
-        layout.addWidget(btn_pdf)
+        layout.addWidget(self.btn_pdf)
         layout.addWidget(self.lbl_sig)
-        layout.addWidget(btn_sig)
+        layout.addWidget(self.btn_sig)
         
         # Page Selection
         page_layout = QHBoxLayout()
-        page_layout.addWidget(QLabel("Sayfa (1'den başlar):"))
+        self.lbl_page = QLabel(t("lbl_sig_page"))
         self.spin_page = QSpinBox()
         self.spin_page.setMinimum(1)
         self.spin_page.setMaximum(9999)
+        page_layout.addWidget(self.lbl_page)
         page_layout.addWidget(self.spin_page)
         layout.addLayout(page_layout)
         
         # Position Selection
-        group_pos = QGroupBox("İmza Konumu")
+        self.group_pos = QGroupBox(t("lbl_sig_position"))
         pos_layout = QHBoxLayout()
-        self.rb_br = QRadioButton("Sağ Alt")
-        self.rb_bl = QRadioButton("Sol Alt")
-        self.rb_tr = QRadioButton("Sağ Üst")
-        self.rb_tl = QRadioButton("Sol Üst")
-        self.rb_c = QRadioButton("Merkez")
+        self.rb_br = QRadioButton(t("pos_bottom_right"))
+        self.rb_bl = QRadioButton(t("pos_bottom_left"))
+        self.rb_tr = QRadioButton(t("pos_top_right"))
+        self.rb_tl = QRadioButton(t("pos_top_left"))
+        self.rb_c = QRadioButton("Merkez / Center")
         self.rb_br.setChecked(True) # Default
         
         pos_layout.addWidget(self.rb_br)
@@ -51,26 +53,48 @@ class PageSignature(QWidget):
         pos_layout.addWidget(self.rb_tr)
         pos_layout.addWidget(self.rb_tl)
         pos_layout.addWidget(self.rb_c)
-        group_pos.setLayout(pos_layout)
-        layout.addWidget(group_pos)
+        self.group_pos.setLayout(pos_layout)
+        layout.addWidget(self.group_pos)
         
         # Action Button
-        btn_apply = QPushButton("İmzayı Ekle ve Kaydet")
-        btn_apply.clicked.connect(self.apply_signature)
-        layout.addWidget(btn_apply)
+        self.btn_apply = QPushButton(t("btn_sign_pdf"))
+        self.btn_apply.clicked.connect(self.apply_signature)
+        layout.addWidget(self.btn_apply)
         layout.addStretch()
 
+    def retranslate_ui(self):
+        if self.pdf_path:
+            self.lbl_pdf.setText(t("selected_file", file=os.path.basename(self.pdf_path)))
+        else:
+            self.lbl_pdf.setText(t("selected_file", file=t("none_selected")))
+            
+        self.btn_pdf.setText(t("select_file"))
+        
+        if self.sig_path:
+            self.lbl_sig.setText(t("lbl_sig_image") + " " + os.path.basename(self.sig_path))
+        else:
+            self.lbl_sig.setText(t("lbl_sig_image") + " " + t("none_selected"))
+            
+        self.btn_sig.setText(t("btn_select_sig"))
+        self.lbl_page.setText(t("lbl_sig_page"))
+        self.group_pos.setTitle(t("lbl_sig_position"))
+        self.rb_br.setText(t("pos_bottom_right"))
+        self.rb_bl.setText(t("pos_bottom_left"))
+        self.rb_tr.setText(t("pos_top_right"))
+        self.rb_tl.setText(t("pos_top_left"))
+        self.btn_apply.setText(t("btn_sign_pdf"))
+
     def select_pdf(self):
-        path, _ = QFileDialog.getOpenFileName(self, "PDF Seç", "", "PDF Files (*.pdf)")
+        path, _ = QFileDialog.getOpenFileName(self, t("select_file"), "", "PDF Files (*.pdf)")
         if path:
             self.pdf_path = path
-            self.lbl_pdf.setText(f"Seçilen PDF: {os.path.basename(path)}")
+            self.lbl_pdf.setText(t("selected_file", file=os.path.basename(path)))
 
     def select_sig(self):
-        path, _ = QFileDialog.getOpenFileName(self, "İmza Seç", "", "Images (*.png *.jpg *.jpeg)")
+        path, _ = QFileDialog.getOpenFileName(self, t("btn_select_sig"), "", "Images (*.png *.jpg *.jpeg)")
         if path:
             self.sig_path = path
-            self.lbl_sig.setText(f"Seçilen İmza: {os.path.basename(path)}")
+            self.lbl_sig.setText(t("lbl_sig_image") + f" {os.path.basename(path)}")
 
     def calculate_rect(self, doc_width, doc_height, sig_width=150, sig_height=50, margin=50):
         if self.rb_br.isChecked(): # Sağ Alt
@@ -103,10 +127,10 @@ class PageSignature(QWidget):
 
     def apply_signature(self):
         if not self.pdf_path or not self.sig_path:
-            QMessageBox.warning(self, "Hata", "Lütfen PDF ve İmza dosyalarını seçin.")
+            QMessageBox.warning(self, t("warning"), t("please_select_file"))
             return
             
-        out_path, _ = QFileDialog.getSaveFileName(self, "Farklı Kaydet", "", "PDF Files (*.pdf)")
+        out_path, _ = QFileDialog.getSaveFileName(self, t("save_as"), "", "PDF Files (*.pdf)")
         if not out_path:
             return
             
@@ -119,9 +143,9 @@ class PageSignature(QWidget):
                 
             page = doc[page_index]
             rect = self.calculate_rect(page.rect.width, page.rect.height)
-            doc.close() # Close since add_signature_to_pdf opens it again
+            doc.close()
             
             add_signature_to_pdf(self.pdf_path, self.sig_path, page_index, rect, out_path)
-            QMessageBox.information(self, "Başarılı", "İmza başarıyla eklendi.")
+            QMessageBox.information(self, t("success"), t("msg_sign_success"))
         except Exception as e:
-            QMessageBox.critical(self, "Hata", str(e))
+            QMessageBox.critical(self, t("error"), str(e))

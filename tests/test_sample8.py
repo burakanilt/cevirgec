@@ -8,7 +8,7 @@ from core.pdf_backend import open_document, render_page
 from core.ocr.engine import run_ocr
 
 # 1. Create a PDF with Turkish text using a standard font that supports it
-pdf_path = "tests/samples/Sample 8_turkish.pdf"
+pdf_path = os.path.join(os.path.dirname(__file__), "dummy_turkish_sample.pdf")
 
 def create_turkish_pdf():
     # In Windows, we can use Arial or Calibri which supports Turkish
@@ -27,7 +27,9 @@ def create_turkish_pdf():
     c.save()
 
 def test_ocr():
-    print(f"--- SAMPLE 8: TÜRKÇE KARAKTER TESTİ ---")
+    print(f"--- DUMMY TÜRKÇE KARAKTER TESTİ ---")
+    if not os.path.exists(pdf_path):
+        create_turkish_pdf()
     doc = open_document(pdf_path)
     img = render_page(doc, 0, dpi=300)
     
