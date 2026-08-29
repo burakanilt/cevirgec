@@ -47,3 +47,24 @@ def convert_docx_to_pdf(docx_path: str, output_path: str):
             pythoncom.CoUninitialize()
         except:
             pass
+
+def convert_image_to_pdf(image_path: str, output_path: str):
+    """
+    Görsel dosyasını (PNG, JPG, JPEG, BMP, WEBP, TIFF vb.) PDF formatına dönüştürür.
+    Şeffaflık (RGBA / LA / P) içeren görseller için beyaz arka plan kompozit edilir.
+    EXIF yönlendirmesi otomatik düzeltilir.
+    """
+    from PIL import Image, ImageOps
+
+    img = Image.open(image_path)
+    img = ImageOps.exif_transpose(img)
+
+    if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
+        background = Image.new('RGBA', img.size, (255, 255, 255, 255))
+        alpha_composite = Image.alpha_composite(background, img.convert('RGBA'))
+        img = alpha_composite.convert('RGB')
+    elif img.mode != 'RGB':
+        img = img.convert('RGB')
+
+    img.save(output_path, "PDF", resolution=100.0)
+    return output_path

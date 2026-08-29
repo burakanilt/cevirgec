@@ -36,7 +36,7 @@ TRANSLATIONS = {
         "clear": "Temizle",
         "preview": "Önizleme",
         "unsupported_file": "Desteklenmeyen Dosya",
-        "unsupported_file_msg": "Seçilen dosya formatı desteklenmiyor (.pdf, .docx, .xlsx, .xls, .md, .txt).",
+        "unsupported_file_msg": "Seçilen dosya formatı desteklenmiyor (.pdf, .docx, .xlsx, .xls, .md, .txt, .png, .jpg, .jpeg, .bmp, .webp, .tiff).",
         "please_select_file": "Lütfen önce bir dosya seçin.",
 
         # Dropzone
@@ -52,6 +52,7 @@ TRANSLATIONS = {
         "btn_word_to_pdf": "Word -> PDF",
         "btn_excel_to_pdf": "Excel -> PDF",
         "btn_md_to_pdf": "Markdown -> PDF",
+        "btn_image_to_pdf": "Görsel -> PDF",
         "ocr_lang_label": "OCR Tanıma Dili:",
         "ocr_lang_tr": "🇹🇷 Türkçe",
         "ocr_lang_en": "🇬🇧 English",
@@ -63,6 +64,7 @@ TRANSLATIONS = {
         "msg_word_pdf_success": "Word dosyası başarıyla PDF'e dönüştürüldü.",
         "msg_excel_pdf_success": "Excel dosyası başarıyla PDF'e dönüştürüldü.",
         "msg_md_pdf_success": "Markdown dosyası başarıyla PDF'e dönüştürüldü.",
+        "msg_image_pdf_success": "Görsel dosyası başarıyla PDF'e dönüştürüldü.",
 
         # Page: PDF Tools
         "tab_merge": "Birleştir",
@@ -181,7 +183,7 @@ TRANSLATIONS = {
         "clear": "Clear",
         "preview": "Preview",
         "unsupported_file": "Unsupported File",
-        "unsupported_file_msg": "Selected file format is not supported (.pdf, .docx, .xlsx, .xls, .md, .txt).",
+        "unsupported_file_msg": "Selected file format is not supported (.pdf, .docx, .xlsx, .xls, .md, .txt, .png, .jpg, .jpeg, .bmp, .webp, .tiff).",
         "please_select_file": "Please select a file first.",
 
         # Dropzone
@@ -197,6 +199,7 @@ TRANSLATIONS = {
         "btn_word_to_pdf": "Word -> PDF",
         "btn_excel_to_pdf": "Excel -> PDF",
         "btn_md_to_pdf": "Markdown -> PDF",
+        "btn_image_to_pdf": "Image -> PDF",
         "ocr_lang_label": "OCR Language:",
         "ocr_lang_tr": "🇹🇷 Turkish",
         "ocr_lang_en": "🇬🇧 English",
@@ -208,6 +211,7 @@ TRANSLATIONS = {
         "msg_word_pdf_success": "Word document was successfully converted to PDF.",
         "msg_excel_pdf_success": "Excel spreadsheet was successfully converted to PDF.",
         "msg_md_pdf_success": "Markdown file was successfully converted to PDF.",
+        "msg_image_pdf_success": "Image was successfully converted to PDF.",
 
         # Page: PDF Tools
         "tab_merge": "Merge",

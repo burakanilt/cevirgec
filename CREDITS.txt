@@ -43,7 +43,7 @@ Copyright (c) 2026 Burak Tekiner
    - Sahibi/Kredi: Jeremy Singer-Vine (https://github.com/jsvine/pdfplumber)
 
 8. Pillow (PIL)
-   - Kullanım Amacı: Görsel boyutlandırma, format dönüştürme, DPI ayarları ve ıslak imza temizliği
+   - Kullanım Amacı: Görsel boyutlandırma, görselden PDF üretimi (Fotoğraf -> PDF), format dönüştürme, DPI ayarları ve ıslak imza temizliği
    - Lisans: HPND (Historical Permission Notice and Disclaimer - MIT benzeri)
    - Sahibi/Kredi: Alex Clark and Contributors (https://github.com/python-pillow/Pillow)
 

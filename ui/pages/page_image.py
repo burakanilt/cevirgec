@@ -41,7 +41,7 @@ class PageImage(QWidget):
         row_fmt = QHBoxLayout()
         self.lbl_fmt = QLabel(t("lbl_output_format"))
         self.combo_fmt = QComboBox()
-        self.combo_fmt.addItems(["PNG", "JPEG"])
+        self.combo_fmt.addItems(["PNG", "JPEG", "PDF"])
         row_fmt.addWidget(self.lbl_fmt)
         row_fmt.addWidget(self.combo_fmt)
         g_layout.addLayout(row_fmt)
@@ -100,7 +100,7 @@ class PageImage(QWidget):
         self.btn_apply.setText(t("btn_apply_image"))
 
     def select_img(self):
-        path, _ = QFileDialog.getOpenFileName(self, t("select_file"), "", "Images (*.png *.jpg *.jpeg *.bmp)")
+        path, _ = QFileDialog.getOpenFileName(self, t("select_file"), "", "Images (*.png *.jpg *.jpeg *.bmp *.webp *.tiff *.tif);;All Files (*.*)")
         if path:
             self.img_path = path
             self.lbl_img.setText(t("selected_file", file=os.path.basename(path)))
@@ -111,7 +111,10 @@ class PageImage(QWidget):
             return
             
         fmt = self.combo_fmt.currentText()
-        out_path, _ = QFileDialog.getSaveFileName(self, t("save_as"), "", f"{fmt} Files (*.{fmt.lower()})")
+        if fmt.upper() == "PDF":
+            out_path, _ = QFileDialog.getSaveFileName(self, t("save_as"), "", "PDF Files (*.pdf)")
+        else:
+            out_path, _ = QFileDialog.getSaveFileName(self, t("save_as"), "", f"{fmt} Files (*.{fmt.lower()})")
         if not out_path:
             return
             

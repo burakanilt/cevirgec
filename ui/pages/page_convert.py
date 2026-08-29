@@ -133,6 +133,10 @@ class PageConvert(QWidget):
         self.btn_md_pdf.clicked.connect(self.md_to_pdf)
         self.grid_import.addWidget(self.btn_md_pdf, 1, 0)
         
+        self.btn_image_pdf = QPushButton(t("btn_image_to_pdf"))
+        self.btn_image_pdf.clicked.connect(self.image_to_pdf)
+        self.grid_import.addWidget(self.btn_image_pdf, 1, 1)
+        
         self.group_import.setLayout(self.grid_import)
         layout.addWidget(self.group_import)
         
@@ -174,6 +178,7 @@ class PageConvert(QWidget):
         self.btn_word_pdf.setText(t("btn_word_to_pdf"))
         self.btn_excel_pdf.setText(t("btn_excel_to_pdf"))
         self.btn_md_pdf.setText(t("btn_md_to_pdf"))
+        self.btn_image_pdf.setText(t("btn_image_to_pdf"))
 
     def get_selected_ocr_lang(self) -> str:
         return self.combo_ocr_lang.currentData() or "tr"
@@ -183,7 +188,7 @@ class PageConvert(QWidget):
             self, 
             t("select_file"), 
             "", 
-            "Supported Files (*.pdf *.docx *.xlsx *.xls *.md *.txt)"
+            "Supported Files (*.pdf *.docx *.xlsx *.xls *.md *.txt *.png *.jpg *.jpeg *.bmp *.webp *.tiff *.tif);;All Files (*.*)"
         )
         if path:
             self.set_selected_file(path)
@@ -195,6 +200,7 @@ class PageConvert(QWidget):
         self.lbl_selected.setText(t("selected_file", file=os.path.basename(path)))
         
         ext = os.path.splitext(path)[1].lower()
+        image_exts = ['.png', '.jpg', '.jpeg', '.bmp', '.webp', '.tiff', '.tif']
         if ext == '.pdf':
             self.group_export.setVisible(True)
             self.group_import.setVisible(False)
@@ -207,18 +213,28 @@ class PageConvert(QWidget):
             self.btn_word_pdf.setVisible(True)
             self.btn_excel_pdf.setVisible(False)
             self.btn_md_pdf.setVisible(False)
+            self.btn_image_pdf.setVisible(False)
         elif ext in ['.xlsx', '.xls']:
             self.group_export.setVisible(False)
             self.group_import.setVisible(True)
             self.btn_word_pdf.setVisible(False)
             self.btn_excel_pdf.setVisible(True)
             self.btn_md_pdf.setVisible(False)
+            self.btn_image_pdf.setVisible(False)
         elif ext in ['.md', '.txt']:
             self.group_export.setVisible(False)
             self.group_import.setVisible(True)
             self.btn_word_pdf.setVisible(False)
             self.btn_excel_pdf.setVisible(False)
             self.btn_md_pdf.setVisible(True)
+            self.btn_image_pdf.setVisible(False)
+        elif ext in image_exts:
+            self.group_export.setVisible(False)
+            self.group_import.setVisible(True)
+            self.btn_word_pdf.setVisible(False)
+            self.btn_excel_pdf.setVisible(False)
+            self.btn_md_pdf.setVisible(False)
+            self.btn_image_pdf.setVisible(True)
         else:
             self.group_export.setVisible(False)
             self.group_import.setVisible(False)
@@ -347,3 +363,15 @@ class PageConvert(QWidget):
             task()
         except Exception as e:
             self.on_error(str(e))
+
+    def image_to_pdf(self):
+        if not self.selected_file_path: return
+        out_path, _ = QFileDialog.getSaveFileName(self, t("save_as"), "", "PDF Files (*.pdf)")
+        if not out_path: return
+        
+        def task():
+            from core.convert.to_pdf import convert_image_to_pdf
+            convert_image_to_pdf(self.selected_file_path, out_path)
+            self.signals.success.emit(t("msg_image_pdf_success"))
+            
+        self.run_in_background(task)
