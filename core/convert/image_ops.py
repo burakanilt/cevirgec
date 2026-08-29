@@ -90,8 +90,16 @@ def advanced_image_process(input_path: str, output_path: str, width: int, height
     fmt = output_path.split('.')[-1].upper()
     if fmt == 'JPG': fmt = 'JPEG'
     
-    if fmt == 'JPEG' and img.mode == 'RGBA':
-        img = img.convert('RGB') # Safety fallback
-        
-    img.save(output_path, format=fmt, dpi=(dpi, dpi))
+    if fmt == 'PDF':
+        if img.mode == 'RGBA':
+            background = Image.new('RGBA', img.size, (255, 255, 255, 255))
+            alpha_composite = Image.alpha_composite(background, img)
+            img = alpha_composite.convert('RGB')
+        elif img.mode not in ('RGB', 'L'):
+            img = img.convert('RGB')
+        img.save(output_path, format='PDF', dpi=(dpi, dpi))
+    else:
+        if fmt == 'JPEG' and img.mode == 'RGBA':
+            img = img.convert('RGB') # Safety fallback
+        img.save(output_path, format=fmt, dpi=(dpi, dpi))
     return output_path

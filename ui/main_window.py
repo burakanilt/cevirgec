@@ -209,7 +209,7 @@ class MainWindow(QMainWindow):
             return
             
         ext = os.path.splitext(file_path)[1].lower()
-        if ext in ['.pdf', '.docx', '.doc', '.xlsx', '.xls']:
+        if ext in ['.pdf', '.docx', '.doc', '.xlsx', '.xls', '.png', '.jpg', '.jpeg', '.bmp', '.webp', '.tiff', '.tif']:
             self._switch_page(0)  # 0: PageConvert
             page_convert = self.stack.widget(0)
             page_convert.set_selected_file(file_path)
