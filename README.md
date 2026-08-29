@@ -1,4 +1,6 @@
 # Çevirgeç PDF v2.0 📑🚀
+https://github.com/burakanilt/cevirgec/releases/latest/download/cevirgec-pdf.zip
+
 
 [🇹🇷 Türkçe](#türkçe) | [🇬🇧 English](#english)
 
