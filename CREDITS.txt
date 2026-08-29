@@ -1,7 +1,12 @@
 Çevirgeç PDF V.2.0 - Üçüncü Parti Yazılım Kredileri ve Lisansları
 
 Bu yazılım, GNU Affero Genel Kamu Lisansı (AGPL-3.0) altındadır ve kaynak kodları açık kaynaklıdır. 
-Copyright (c) 2026 Burak Tekiner
+
+Çevirgeç PDF V.2.0
+Proje Sahibi & Geliştirici: Burak Tekiner (https://github.com/burakanilt)
+Lisans: GNU Affero General Public License v3.0 (AGPL-3.0)
+2026 Burak Tekiner
+
 
 Çevirgeç PDF bünyesinde kullanılan ana üçüncü parti kütüphanelerin listesi, telif sahipleri, kullanım amaçları ve lisans türleri aşağıda belirtilmiştir. Bu kütüphanelerin geliştiricilerine katkılarından ötürü teşekkür ederiz.
 
