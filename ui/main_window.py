@@ -17,6 +17,7 @@ from ui.pages.page_signature import PageSignature
 from ui.pages.page_etds import PageEtds
 from ui.pages.page_convert import PageConvert
 from ui.pages.page_watermark import PageWatermark
+from ui.pages.page_viewer import PageViewer
 
 import qtawesome as qta
 import ctypes
@@ -56,14 +57,15 @@ class MainWindow(QMainWindow):
 
     def _get_menu_defs(self):
         return [
-            ("nav_convert", 0, "fa5s.sync"),
-            ("nav_pdf_tools", 1, "fa5s.file-pdf"),
-            ("nav_security", 2, "fa5s.shield-alt"),
-            ("nav_etds", 3, "fa5s.book"),
-            ("nav_watermark", 4, "fa5s.tint"),
-            ("nav_signature", 5, "fa5s.signature"),
-            ("nav_image", 6, "fa5s.image"),
-            ("nav_notepad", 7, "fa5s.edit")
+            ("nav_viewer", 0, "fa5s.book-open"),
+            ("nav_convert", 1, "fa5s.sync"),
+            ("nav_pdf_tools", 2, "fa5s.file-pdf"),
+            ("nav_security", 3, "fa5s.shield-alt"),
+            ("nav_etds", 4, "fa5s.book"),
+            ("nav_watermark", 5, "fa5s.tint"),
+            ("nav_signature", 6, "fa5s.signature"),
+            ("nav_image", 7, "fa5s.image"),
+            ("nav_notepad", 8, "fa5s.edit")
         ]
 
     def _setup_sidebar(self):
@@ -177,14 +179,15 @@ class MainWindow(QMainWindow):
         self.stack = QStackedWidget()
         
         # Add Pages (Indices match the menu)
-        self.stack.addWidget(PageConvert())                                  # 0
-        self.stack.addWidget(PagePdfTools())                                 # 1
-        self.stack.addWidget(PageSecurity())                                 # 2
-        self.stack.addWidget(PageEtds())                                     # 3
-        self.stack.addWidget(PageWatermark())                                # 4
-        self.stack.addWidget(PageSignature())                                # 5
-        self.stack.addWidget(PageImage())                                    # 6
-        self.stack.addWidget(PageNotepad())                                  # 7
+        self.stack.addWidget(PageViewer())                                   # 0
+        self.stack.addWidget(PageConvert())                                  # 1
+        self.stack.addWidget(PagePdfTools())                                 # 2
+        self.stack.addWidget(PageSecurity())                                 # 3
+        self.stack.addWidget(PageEtds())                                     # 4
+        self.stack.addWidget(PageWatermark())                                # 5
+        self.stack.addWidget(PageSignature())                                # 6
+        self.stack.addWidget(PageImage())                                    # 7
+        self.stack.addWidget(PageNotepad())                                  # 8
         
         self.main_layout.addWidget(self.stack)
 
@@ -209,11 +212,36 @@ class MainWindow(QMainWindow):
             return
             
         ext = os.path.splitext(file_path)[1].lower()
-        if ext in ['.pdf', '.docx', '.doc', '.xlsx', '.xls', '.png', '.jpg', '.jpeg', '.bmp', '.webp', '.tiff', '.tif']:
-            self._switch_page(0)  # 0: PageConvert
-            page_convert = self.stack.widget(0)
+        if ext == '.pdf':
+            self._switch_page(0)  # 0: PageViewer
+            page_viewer = self.stack.widget(0)
+            page_viewer.open_file(file_path)
+        elif ext in ['.docx', '.doc', '.xlsx', '.xls', '.png', '.jpg', '.jpeg', '.bmp', '.webp', '.tiff', '.tif']:
+            self._switch_page(1)  # 1: PageConvert
+            page_convert = self.stack.widget(1)
             page_convert.set_selected_file(file_path)
         elif ext in ['.md', '.txt']:
-            self._switch_page(7)  # 7: PageNotepad
-            page_notepad = self.stack.widget(7)
+            self._switch_page(8)  # 8: PageNotepad
+            page_notepad = self.stack.widget(8)
             page_notepad.load_file(file_path)
+
+    def closeEvent(self, event):
+        from PySide6.QtWidgets import QMessageBox
+        viewer = self.stack.widget(0)
+        if hasattr(viewer, 'has_unsaved_changes') and viewer.has_unsaved_changes:
+            ans = QMessageBox.question(
+                self, 
+                t("warning"), 
+                t("viewer_unsaved_changes"),
+                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel
+            )
+            if ans == QMessageBox.Yes:
+                viewer.save_file()
+                if viewer.has_unsaved_changes:
+                    event.ignore()
+                    return
+            elif ans == QMessageBox.Cancel:
+                event.ignore()
+                return
+        event.accept()
+
