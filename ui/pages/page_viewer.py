@@ -7,7 +7,7 @@ from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QIcon, QKeySequence, QShortcut
 import qtawesome as qta
 
-from ui.widgets.pdf_canvas import PdfCanvas
+from ui.widgets.pdf_canvas import PdfCanvas, MARKUP_TOOLS
 from core import pdf_annotations as pa
 from core.utils.i18n import t
 
@@ -150,13 +150,13 @@ class PageViewer(QWidget):
             btn.setChecked(t_name == tool)
             
         # If markup tool and selection exists, apply it immediately
-        if tool in pa.MARKUP_TOOLS and self.canvas.has_selection():
+        if tool in MARKUP_TOOLS and self.canvas.has_selection():
             self.canvas.markup_selection(tool)
             self.set_tool("select")
 
     def set_color(self, color_name):
         rgb = pa.COLORS[color_name]
-        for tool in pa.MARKUP_TOOLS + ("note",):
+        for tool in MARKUP_TOOLS + ("note",):
             self.canvas.tool_colors[tool] = rgb
         for c_name, btn in self.color_buttons.items():
             btn.setChecked(c_name == color_name)
