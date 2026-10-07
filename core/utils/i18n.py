@@ -149,9 +149,9 @@ TRANSLATIONS = {
         "notepad_title": "Entegre Not Defteri",
         "btn_open_file": "Dosya Aç (.txt / .md)",
         "btn_save_file": "Kaydet",
-        "btn_export_pdf": "PDF Olarak Dışa Aktar",
+        "btn_export_md": "MD Olarak Dışa Aktar",
         "msg_note_saved": "Not başarıyla kaydedildi.",
-        "msg_note_pdf_exported": "Not başarıyla PDF olarak dışa aktarıldı.",
+        "msg_note_md_exported": "Not başarıyla MD olarak dışa aktarıldı.",
 
         # Page: PDF Viewer
         "viewer_title": "PDF Görüntüleyici",
@@ -389,9 +389,9 @@ TRANSLATIONS = {
         "notepad_title": "Integrated Notepad",
         "btn_open_file": "Open File (.txt / .md)",
         "btn_save_file": "Save",
-        "btn_export_pdf": "Export as PDF",
+        "btn_export_md": "Export as MD",
         "msg_note_saved": "Note was successfully saved.",
-        "msg_note_pdf_exported": "Note was successfully exported to PDF.",
+        "msg_note_md_exported": "Note was successfully exported to MD.",
 
         # Page: PDF Viewer
         "viewer_title": "PDF Viewer",

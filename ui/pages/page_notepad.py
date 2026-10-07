@@ -25,7 +25,7 @@ class PageNotepad(QWidget):
         self.btn_save = QPushButton(t("btn_save_file"))
         self.btn_save.clicked.connect(self.save_file)
         
-        self.btn_export = QPushButton(t("btn_export_pdf"))
+        self.btn_export = QPushButton(t("btn_export_md"))
         self.btn_export.clicked.connect(self.export_file)
         
         toolbar.addWidget(self.btn_new)
@@ -62,7 +62,7 @@ class PageNotepad(QWidget):
     def retranslate_ui(self):
         self.btn_open.setText(t("btn_open_file"))
         self.btn_save.setText(t("btn_save_file"))
-        self.btn_export.setText(t("btn_export_pdf"))
+        self.btn_export.setText(t("btn_export_md"))
 
     def update_preview(self):
         text = self.editor.toPlainText()
@@ -142,6 +142,6 @@ class PageNotepad(QWidget):
             try:
                 with open(path, "w", encoding="utf-8") as f:
                     f.write(self.editor.toPlainText())
-                QMessageBox.information(self, t("success"), t("msg_note_pdf_exported"))
+                QMessageBox.information(self, t("success"), t("msg_note_md_exported"))
             except Exception as e:
                 QMessageBox.critical(self, t("error"), str(e))
