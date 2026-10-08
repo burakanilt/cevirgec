@@ -204,6 +204,21 @@ def convert_digital_pdf_to_excel(pdf_path: str, excel_path: str, pages: list[int
         except Exception as e:
             print(f"Camelot stream error: {e}")
 
+    # Camelot tabloları sayfadaki metnin çoğunu kapsamıyorsa (ör. sadece başlık
+    # kutusu çizgili, veri satırları çizgisiz) çizgisiz çıkarıma geç.
+    if tables and len(tables) > 0:
+        try:
+            table_chars = sum(len(str(c).replace(" ", "").replace("\n", ""))
+                              for tb in tables for row in tb.df.values.tolist() for c in row)
+            with pdfplumber.open(pdf_path) as _pdf:
+                idxs = pages if pages is not None else range(len(_pdf.pages))
+                page_chars = sum(len((_pdf.pages[i].extract_text() or "").replace(" ", "").replace("\n", ""))
+                                 for i in idxs)
+            if page_chars and table_chars < 0.6 * page_chars:
+                tables = None
+        except Exception as e:
+            print(f"Coverage check error: {e}")
+
     if tables and len(tables) > 0:
         wb.remove(ws) # Varsayılan boş sekmeyi sil
         for i, table in enumerate(tables):
@@ -213,6 +228,21 @@ def convert_digital_pdf_to_excel(pdf_path: str, excel_path: str, pages: list[int
                 cleaned_row = [str(cell).strip() if cell is not None and str(cell) != "NaN" else "" for cell in row]
                 new_ws.append(cleaned_row)
             has_written = True
+    else:
+        try:
+            with pdfplumber.open(pdf_path) as pdf:
+                idxs = pages if pages is not None else range(len(pdf.pages))
+                for i in idxs:
+                    rows = extract_borderless_table(pdf.pages[i])
+                    if not rows:
+                        continue
+                    if has_written:
+                        ws.append([])
+                    for r in rows:
+                        ws.append(r)
+                    has_written = True
+        except Exception as e:
+            print(f"Borderless extraction error: {e}")
                     
     # If no tables found at all, write a placeholder message
     if not has_written:

@@ -95,4 +95,23 @@ QFrame#DropZone:hover {{
     border: 2px dashed {PRIMARY_COLOR};
     background-color: {SURFACE_HOVER};
 }}
+QRadioButton {{
+    spacing: 8px;
+    padding: 4px 2px;
+}}
+QRadioButton::indicator {{
+    width: 14px;
+    height: 14px;
+    border: 2px solid {TEXT_MUTED};
+    border-radius: 9px;
+    background-color: {BG_COLOR};
+}}
+QRadioButton::indicator:hover {{
+    border: 2px solid {PRIMARY_COLOR};
+}}
+QRadioButton::indicator:checked {{
+    border: 2px solid {PRIMARY_COLOR};
+    background-color: qradialgradient(cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5,
+        stop:0 {PRIMARY_COLOR}, stop:0.55 {PRIMARY_COLOR}, stop:0.6 {BG_COLOR}, stop:1 {BG_COLOR});
+}}
 """

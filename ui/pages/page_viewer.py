@@ -4,7 +4,8 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
                                QFileDialog, QMessageBox, QLabel, QSplitter,
                                QListWidget, QListWidgetItem, QToolBar, QToolButton, QInputDialog)
 from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QIcon, QKeySequence, QShortcut
+from PySide6.QtGui import QIcon, QKeySequence, QShortcut, QImage, QPainter
+from ui.widgets.print_dialog import PrintDialog
 import qtawesome as qta
 
 from ui.widgets.pdf_canvas import PdfCanvas, MARKUP_TOOLS
@@ -38,6 +39,7 @@ class PageViewer(QWidget):
         self.btn_open = self._add_tool(self.toolbar, "fa5s.folder-open", "viewer_open_tip", self.open_file)
         self.btn_save = self._add_tool(self.toolbar, "fa5s.save", "viewer_save_tip", self.save_file)
         self.btn_save_as = self._add_tool(self.toolbar, "fa5s.file-download", "viewer_save_as_tip", self.save_file_as)
+        self.btn_print = self._add_tool(self.toolbar, "fa5s.print", "viewer_print_tip", self.print_file)
         self.toolbar.addSeparator()
 
         self.btn_zoom_out = self._add_tool(self.toolbar, "fa5s.search-minus", "viewer_zoom_out", lambda: self.canvas.zoom_out())
@@ -137,6 +139,7 @@ class PageViewer(QWidget):
     def _setup_shortcuts(self):
         QShortcut(QKeySequence("Ctrl+O"), self).activated.connect(self.open_file)
         QShortcut(QKeySequence("Ctrl+S"), self).activated.connect(self.save_file)
+        QShortcut(QKeySequence("Ctrl+P"), self).activated.connect(self.print_file)
         QShortcut(QKeySequence("Ctrl+Z"), self).activated.connect(self.canvas.undo)
         QShortcut(QKeySequence("V"), self).activated.connect(lambda: self.set_tool("select"))
         QShortcut(QKeySequence("H"), self).activated.connect(lambda: self.set_tool("hand"))
@@ -215,6 +218,32 @@ class PageViewer(QWidget):
         if path:
             self.file_path = path
             self.save_file()
+
+    def print_file(self):
+        if not self.doc:
+            return
+        dlg = PrintDialog(self.doc.page_count, self._paint_pages, self)
+        dlg.exec()
+
+    def _paint_pages(self, printer, first=1, last=None, dpi=200):
+        try:
+            last = last or self.doc.page_count
+            painter = QPainter(printer)
+            for i in range(first - 1, last):
+                if i > first - 1:
+                    printer.newPage()
+                pix = self.doc[i].get_pixmap(dpi=dpi, annots=True)
+                img = QImage(pix.samples, pix.width, pix.height, pix.stride, QImage.Format_RGB888).copy()
+                rect = painter.viewport()
+                size = img.size().scaled(rect.size(), Qt.KeepAspectRatio)
+                painter.setViewport(rect.x(), rect.y(), size.width(), size.height())
+                painter.setWindow(img.rect())
+                painter.drawImage(0, 0, img)
+                painter.setViewport(rect)
+                painter.setWindow(rect)
+            painter.end()
+        except Exception as e:
+            QMessageBox.critical(self, t("error"), f"Print error: {e}")
 
     def _on_zoom_changed(self, zoom):
         self.lbl_zoom.setText(f" {int(zoom * 100)}% ")
